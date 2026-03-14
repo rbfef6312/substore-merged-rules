@@ -23,7 +23,7 @@ const CONVERT_PROVIDERS = new Set([
   "EHentai", "SteamFix", "GoogleFCM", "AdditionalFilter", "AdditionalCDNResources", "Crypto",
 ]);
 
-// configfull 组名 -> convert 组名（仅用于 convert 已有的组，新增组保持原名）
+// configfull 组名 -> convert 组名（Clash Party 等客户端可能未识别注入的策略组，统一映射到已有组）
 const GROUP_MAP = {
   "节点选择": "选择代理",
   "全球直连": "直连",
@@ -32,6 +32,32 @@ const GROUP_MAP = {
   "巴哈姆特": "Bahamut",
   "Final": "选择代理",
   NETFLIX: "Netflix",
+  Meta: "选择代理",
+  Discord: "选择代理",
+  LINE: "选择代理",
+  Signal: "选择代理",
+  Talkatone: "选择代理",
+  FCM: "直连",
+  GoogleVPN: "选择代理",
+  DisneyPlus: "选择代理",
+  HBO: "选择代理",
+  Primevideo: "选择代理",
+  AppleTV: "选择代理",
+  Apple: "直连",
+  Emby: "选择代理",
+  "哔哩东南亚": "Bilibili",
+  "国内媒体": "直连",
+  "Global-TV": "选择代理",
+  "Global-Medial": "选择代理",
+  "游戏平台": "选择代理",
+  Speedtest: "选择代理",
+  PayPal: "选择代理",
+  Wise: "选择代理",
+  "国外电商": "选择代理",
+  STEAM: "选择代理",
+  GitHub: "选择代理",
+  "自建家宽节点": "选择代理",
+  "欧洲节点": "选择代理",
 };
 
 function fetchUrl(url) {
