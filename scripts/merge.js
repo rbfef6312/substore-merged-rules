@@ -23,7 +23,7 @@ const CONVERT_PROVIDERS = new Set([
   "EHentai", "SteamFix", "GoogleFCM", "AdditionalFilter", "AdditionalCDNResources", "Crypto",
 ]);
 
-// configfull 组名 -> convert.js 组名
+// configfull 组名 -> convert.js 组名（未在 convert 中的组映射到 选择代理）
 const GROUP_MAP = {
   "节点选择": "选择代理",
   "全球直连": "直连",
@@ -31,6 +31,31 @@ const GROUP_MAP = {
   "哔哩哔哩": "Bilibili",
   "巴哈姆特": "Bahamut",
   "Final": "选择代理",
+  Discord: "选择代理",
+  LINE: "选择代理",
+  Signal: "选择代理",
+  Talkatone: "选择代理",
+  Meta: "选择代理",
+  GitHub: "选择代理",
+  GoogleVPN: "选择代理",
+  FCM: "直连",
+  DisneyPlus: "选择代理",
+  HBO: "选择代理",
+  Primevideo: "选择代理",
+  AppleTV: "选择代理",
+  Apple: "选择代理",
+  Emby: "选择代理",
+  "哔哩东南亚": "Bilibili",
+  "国内媒体": "直连",
+  "Global-TV": "选择代理",
+  "Global-Medial": "选择代理",
+  "游戏平台": "选择代理",
+  Speedtest: "选择代理",
+  PayPal: "选择代理",
+  Wise: "选择代理",
+  "国外电商": "选择代理",
+  STEAM: "选择代理",
+  NETFLIX: "Netflix",
 };
 
 function fetchUrl(url) {
@@ -100,31 +125,7 @@ async function main() {
     }
   }
 
-  // 3. 额外策略组（configfull 有而 convert 没有的，使用 defaultProxies）
-  const CONVERT_GROUPS = new Set([
-    "选择代理", "手动选择", "故障转移", "直连", "落地节点", "低倍率节点",
-    "静态资源", "AI", "Crypto", "Google", "Microsoft", "YouTube", "Bilibili",
-    "Bahamut", "Netflix", "TikTok", "Spotify", "E-Hentai", "Telegram", "Truth Social",
-    "OneDrive", "PikPak", "SSH(22端口)", "搜狗输入法", "DIRECT", "广告拦截", "GLOBAL",
-  ]);
-  const CF_EXTRA_GROUPS = [
-    { name: "Discord", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/discord.png" },
-    { name: "LINE", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/line.png" },
-    { name: "Signal", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/signal.png" },
-    { name: "Meta", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/meta.png" },
-    { name: "GitHub", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/github.png" },
-    { name: "DisneyPlus", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/disney.png" },
-    { name: "HBO", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/hbo.png" },
-    { name: "Primevideo", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/primevideo.png" },
-    { name: "AppleTV", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/appletv.png" },
-    { name: "STEAM", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/steam.png" },
-    { name: "PayPal", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/paypal.png" },
-    { name: "Wise", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/wise.png" },
-    { name: "Emby", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/emby.png" },
-    { name: "Speedtest", icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/speedtest.png" },
-  ];
-  const extraGroups = CF_EXTRA_GROUPS.filter((g) => !CONVERT_GROUPS.has(g.name));
-
+  // 3. 策略组注入已禁用 - 避免不同 JS 解析器兼容性问题，新规则映射到已有组
   let out = convertJs;
 
   // 注入 rule-providers（注意 $1 已含尾部逗号，不要重复加）
@@ -140,24 +141,6 @@ async function main() {
     out = out.replace(
       /("DST-PORT,22,SSH\(22端口\)",)\s*(`MATCH)/,
       `$1\n    ${extraRules.join(",\n    ")},\n    $2`
-    );
-  }
-
-  // 注入策略组：在 广告拦截 之后、lowCostNodes 之前（最后一组后必须有逗号）
-  if (extraGroups.length) {
-    const groupStr = extraGroups
-      .map(
-        (g) => `        {
-            name: "${g.name}",
-            icon: "${g.icon}",
-            type: "select",
-            proxies: defaultProxies,
-        }`
-      )
-      .join(",\n");
-    out = out.replace(
-      /(name: "广告拦截",[\s\S]*?proxies: \["REJECT", "REJECT-DROP", PROXY_GROUPS\.DIRECT\],\s*\},)\s*(lowCostNodes\.length > 0)/,
-      `$1\n${groupStr},\n        $2`
     );
   }
 
