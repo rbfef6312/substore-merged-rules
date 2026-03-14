@@ -16,7 +16,7 @@ https://raw.githubusercontent.com/YOUR_USERNAME/substore-merged-rules/main/merge
 
 - 像 convert.js 一样直接引用，**无需手动填写机场订阅地址**（在 Substore 订阅里配置即可）
 - 保留 powerfullz convert.js 的 **Telegram 策略组**
-- 融合 Lanlan13-14 configfull 的完整策略组：FCM、Discord、LINE、Signal、Meta、DisneyPlus、HBO、Primevideo、AppleTV、Apple、Emby、哔哩东南亚、国内媒体、Global-TV、游戏平台、Speedtest、PayPal、Wise、国外电商、STEAM、自建/家宽节点、欧洲节点 等
+- 融合 Lanlan13-14 configfull 的 rule-providers 与 rules，规则统一映射到 convert 原生策略组，兼容 Substore / Clash Party / Clash Verge Rev
 - 每日自动从两位作者仓库拉取最新规则并合并
 - 支持手动触发更新（Actions → 自动合并规则 → Run workflow）
 
