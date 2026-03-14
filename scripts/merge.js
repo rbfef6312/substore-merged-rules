@@ -23,12 +23,16 @@ const CONVERT_PROVIDERS = new Set([
   "EHentai", "SteamFix", "GoogleFCM", "AdditionalFilter", "AdditionalCDNResources", "Crypto",
 ]);
 
-// convert.js 已有的策略组，不重复注入
+// convert.js 已有的策略组，不重复注入（含动态生成的地区组）
 const CONVERT_GROUPS = new Set([
   "选择代理", "直连", "广告拦截", "静态资源", "AI", "Crypto", "Google", "Microsoft",
   "YouTube", "Bilibili", "Bahamut", "Netflix", "TikTok", "Spotify", "E-Hentai",
   "Telegram", "Truth Social", "OneDrive", "PikPak", "搜狗输入法", "GLOBAL",
   "手动选择", "故障转移", "落地节点", "前置代理", "低倍率节点",
+  "香港节点", "新加坡节点", "日本节点", "台湾节点", "美国节点", "全部节点",
+  "香港自动", "新加坡自动", "日本自动", "台湾自动", "美国自动",
+  "香港均衡", "新加坡均衡", "日本均衡", "台湾均衡", "美国均衡",
+  "🔗 代理", "🚫 拒绝", "⚪ 丢弃",
 ]);
 // 规则中 configfull 组名 -> 实际组名（自建/家宽节点 -> 自建家宽节点）
 const RULE_GROUP_NORMALIZE = { "自建/家宽节点": "自建家宽节点" };

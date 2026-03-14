@@ -1033,7 +1033,7 @@ const baseRules = [
     `DOMAIN-SUFFIX,truthsocial.com,Truth Social`,
     `RULE-SET,StaticResources,静态资源`,
     `RULE-SET,CDNResources,静态资源`,
-    `RULE-SET,AdditionalCDNResources,静态��源`,
+    `RULE-SET,AdditionalCDNResources,静态资源`,
     `RULE-SET,Crypto,Crypto`,
     `RULE-SET,EHentai,E-Hentai`,
     `RULE-SET,TikTok,TikTok`,
@@ -1237,7 +1237,7 @@ const geoxURL = {
 };
 
 /**
- * 各地区的元数据：`weight` 决定在代理组列表中的排列顺序（值越小越靠前，未设置则排末尾）；
+ * 各地区的元数据：`weight` 决定在代理组列表中的排列顺序（值越��越靠前，未设置则排末尾）；
  * `pattern` 是用于匹配节点名称的正则字符串；`icon` 为策略组图标 URL。
  */
 const countriesMeta = {
@@ -1271,7 +1271,7 @@ const countriesMeta = {
     },
     美国: {
         weight: 50,
-        pattern: "美国|美|US|United States|🇺🇸",
+        pattern: "美国|��|US|United States|🇺🇸",
         icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png",
     },
     加拿大: {
@@ -1319,7 +1319,7 @@ const LOW_COST_REGEX = /0\.[0-5]|低倍率|省流|大流量|实验性/i;
 const LANDING_REGEX = /家宽|家庭|家庭宽带|商宽|商业宽带|星链|Starlink|落地/i;
 /**
  * `LANDING_PATTERN` 与 `LANDING_REGEX` 描述同一规则，但格式不同：
- * - `LANDING_REGEX`：JS `RegExp` 对象，供脚本内部过滤节���时使用（用 `/i` flag 表示不区分大小写）。
+ * - `LANDING_REGEX`：JS `RegExp` 对象，供脚本内部过滤节点时使用（用 `/i` flag 表示不区分大小写）。
  * - `LANDING_PATTERN`：字符串，写入 YAML 的 `filter` / `exclude-filter` 字段，
  *   其中 `(?i)` 前缀是 Clash/Mihomo 的不区分大小写语法。
  */
@@ -1343,7 +1343,7 @@ function parseLandingNodes(config) {
  * 归类规则：
  * - 名称匹配 `LANDING_REGEX` 的落地节点和匹配 `LOW_COST_REGEX` 的低倍率节点不参与统计。
  * - 每个节点只归入第一个匹配到的地区，避免重复计入。
- * - 地区正则来�� `countriesMeta[country].pattern`；若旧配置中 pattern 携带 `(?i)` 前缀，
+ * - 地区正则来自 `countriesMeta[country].pattern`；若旧配置中 pattern 携带 `(?i)` 前缀，
  *   会在编译前自动剥离（JS RegExp 不支持该语法）。
  *
  * @param {object} config - 订阅配置对象，包含 `proxies` 数组。
@@ -1417,7 +1417,7 @@ function buildCountryProxyGroups({ countries, landing, loadBalance, regexFilter,
         } else {
             /**
              * regex 模式：通过 `include-all` + `filter` 让内核在运行时动态筛选节点，
-             * 同时用 `exclude-filter` 排除低倍率节点；若启��了落地功能，
+             * 同时用 `exclude-filter` 排除低倍率节点；若启用了落���功能，
              * 还需一并排除落地节点，防止其混入普通地区组。
              */
             groupConfig = {
@@ -1467,7 +1467,7 @@ function buildProxyGroups({
     const hasUS = countries.includes("美国");
 
     /**
-     * "前置代理"组的候选列表：从 `defaultSelector` 中移除"落地节点"和"故障转移"，
+     * "��置代理"组的候选列表：从 `defaultSelector` 中移除"落地节点"和"故障转移"，
      * 避免前置代理与落地节点形成循环引用，以及与故障转移组相互嵌套。
      * 仅在 `landing=true` 时使用；否则置为空数组。
      */
@@ -1861,120 +1861,6 @@ function buildProxyGroups({
         {
             name: "Final",
             icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/final.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "香港节点",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "新加坡节点",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "日本节点",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "台湾节点",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "美国节点",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "全部节点",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "香港自动",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "新加坡自动",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "日本自动",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "台湾自动",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "美国自动",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "香港均衡",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "新加坡均衡",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "日本均衡",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "台湾均衡",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "美国均衡",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "🔗 代理",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "🚫 拒绝",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "⚪ 丢弃",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
             type: "select",
             proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
         },
