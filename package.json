@@ -1,0 +1,12 @@
+{
+  "name": "substore-merged-rules",
+  "version": "1.0.0",
+  "description": "自动合并 powerfullz/override-rules 与 Lanlan13-14/Rules，保留 convert.js Telegram 策略组",
+  "scripts": {
+    "merge": "node scripts/merge.js",
+    "update": "npm run merge"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}
