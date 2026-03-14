@@ -1659,7 +1659,7 @@ function buildProxyGroups({
             icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/AdBlack.png",
             type: "select",
             proxies: ["REJECT", "REJECT-DROP", PROXY_GROUPS.DIRECT],
-        },,
+        },
         {
             name: "Discord",
             icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/discord.png",
@@ -1743,7 +1743,7 @@ function buildProxyGroups({
             icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/speedtest.png",
             type: "select",
             proxies: defaultProxies,
-        }
+        },
         lowCostNodes.length > 0 || regexFilter
             ? {
                   name: PROXY_GROUPS.LOW_COST,

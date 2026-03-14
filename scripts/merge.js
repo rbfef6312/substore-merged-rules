@@ -143,7 +143,7 @@ async function main() {
     );
   }
 
-  // 注入策略组：在 广告拦截 之后、lowCostNodes 之前
+  // 注入策略组：在 广告拦截 之后、lowCostNodes 之前（最后一组后必须有逗号）
   if (extraGroups.length) {
     const groupStr = extraGroups
       .map(
@@ -157,7 +157,7 @@ async function main() {
       .join(",\n");
     out = out.replace(
       /(name: "广告拦截",[\s\S]*?proxies: \["REJECT", "REJECT-DROP", PROXY_GROUPS\.DIRECT\],\s*\},)\s*(lowCostNodes\.length > 0)/,
-      `$1,\n${groupStr}\n        $2`
+      `$1\n${groupStr},\n        $2`
     );
   }
 
