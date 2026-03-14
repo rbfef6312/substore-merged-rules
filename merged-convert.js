@@ -1338,7 +1338,7 @@ function parseLandingNodes(config) {
 }
 
 /**
- * 遍历订阅中的所有节点，按 `countriesMeta` 中定义的地区进行归类。
+ * 遍历订阅中的��有节点，按 `countriesMeta` 中定义的地区进行归类。
  *
  * 归类规则：
  * - 名称匹配 `LANDING_REGEX` 的落地节点和匹配 `LOW_COST_REGEX` 的低倍率节点不参与统计。
@@ -1417,7 +1417,7 @@ function buildCountryProxyGroups({ countries, landing, loadBalance, regexFilter,
         } else {
             /**
              * regex 模式：通过 `include-all` + `filter` 让内核在运行时动态筛选节点，
-             * 同时用 `exclude-filter` 排除低倍率节点；若启用了落���功能，
+             * 同时用 `exclude-filter` 排除低倍率节点；若启用了落地功能，
              * 还需一并排除落地节点，防止其混入普通地区组。
              */
             groupConfig = {
@@ -1459,7 +1459,7 @@ function buildProxyGroups({
     defaultFallback,
 }) {
     /**
-     * 预先判断是否存在特定地区的节点，用于为 Bilibili、Bahamut、Truth Social 等
+     * 预先判断是否存在���定地区的节点，用于为 Bilibili、Bahamut、Truth Social 等
      * 有地区偏好的策略组提供更精准的候选列表。
      */
     const hasTW = countries.includes("台湾");
@@ -1467,7 +1467,7 @@ function buildProxyGroups({
     const hasUS = countries.includes("美国");
 
     /**
-     * "��置代理"组的候选列表：从 `defaultSelector` 中移除"落地节点"和"故障转移"，
+     * "前置代理"组的候选列表：从 `defaultSelector` 中移除"落地节点"和"故障转移"，
      * 避免前置代理与落地节点形成循环引用，以及与故障转移组相互嵌套。
      * 仅在 `landing=true` 时使用；否则置为空数组。
      */
