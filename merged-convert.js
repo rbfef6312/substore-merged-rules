@@ -1417,7 +1417,7 @@ function buildCountryProxyGroups({ countries, landing, loadBalance, regexFilter,
         } else {
             /**
              * regex 模式：通过 `include-all` + `filter` 让内核在运行时动态筛选节点，
-             * 同时用 `exclude-filter` 排除低倍率节点；若启用了落��功能，
+             * 同时用 `exclude-filter` 排除低倍率节点；若启用了落地功能，
              * 还需一并排除落地节点，防止其混入普通地区组。
              */
             groupConfig = {
