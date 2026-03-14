@@ -344,13 +344,13 @@ const ruleProviders = {
         url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/steam.mrs",
         path: "./ruleset/steam_domain.mrs",
     },
-    "ai!cn_domain": {
+    "ai_notcn_domain": {
         type: "http",
         behavior: "domain",
         format: "mrs",
         interval: 86400,
         url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ai-!cn.mrs",
-        path: "./ruleset/ai_cn_domain.mrs",
+        path: "./ruleset/ai_notcn_domain.mrs",
     },
     "openai_domain": {
         type: "http",
@@ -464,13 +464,13 @@ const ruleProviders = {
         url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/gfw.mrs",
         path: "./ruleset/gfw_domain.mrs",
     },
-    "geolocation-!cn": {
+    "geolocation_notcn": {
         type: "http",
         behavior: "domain",
         format: "mrs",
         interval: 86400,
         url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs",
-        path: "./ruleset/geolocation-_cn.mrs",
+        path: "./ruleset/geolocation_notcn.mrs",
     },
     "cn_domain": {
         type: "http",
@@ -488,13 +488,13 @@ const ruleProviders = {
         url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-media-cn.mrs",
         path: "./ruleset/media_cn_domain.mrs",
     },
-    "media!cn_domain": {
+    "media_notcn_domain": {
         type: "http",
         behavior: "domain",
         format: "mrs",
         interval: 86400,
         url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-social-media-!cn.mrs",
-        path: "./ruleset/media_cn_domain.mrs",
+        path: "./ruleset/media_notcn_domain.mrs",
     },
     "Cloudflare_domain": {
         type: "http",
@@ -752,13 +752,13 @@ const ruleProviders = {
         url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/alibaba.mrs",
         path: "./ruleset/alibaba_domain.mrs",
     },
-    "tencent!cn_domain": {
+    "tencent_notcn_domain": {
         type: "http",
         behavior: "domain",
         format: "mrs",
         interval: 86400,
         url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/tencent%40!cn.mrs",
-        path: "./ruleset/tencent_cn_domain.mrs",
+        path: "./ruleset/tencent_notcn_domain.mrs",
     },
     "tencent_domain": {
         type: "http",
@@ -814,7 +814,7 @@ const ruleProviders = {
         format: "mrs",
         interval: 86400,
         url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-public-tracker.mrs",
-        path: "./ruleset/public-tracker_domain.mrs",
+        path: "./ruleset/public_tracker_domain.mrs",
     },
     "115_domain": {
         type: "http",
@@ -1089,7 +1089,7 @@ const baseRules = [
     `RULE-SET,google_ip,Google,no-resolve`,
     `RULE-SET,onedrive_domain,OneDrive`,
     `RULE-SET,microsoft_domain,Microsoft`,
-    `RULE-SET,ai!cn_domain,AI`,
+    `RULE-SET,ai_notcn_domain,AI`,
     `RULE-SET,ai_domain,AI`,
     `RULE-SET,openai_domain,AI`,
     `RULE-SET,telegram_domain,Telegram`,
@@ -1100,7 +1100,7 @@ const baseRules = [
     `RULE-SET,discord_domain,Discord`,
     `RULE-SET,discord_asn,Discord,no-resolve`,
     `RULE-SET,signal_domain,Signal`,
-    `RULE-SET,tencent!cn_domain,选择代理`,
+    `RULE-SET,tencent_notcn_domain,选择代理`,
     `RULE-SET,tencent_domain,直连`,
     `RULE-SET,iptv_domain,直连`,
     `RULE-SET,private_domain,直连`,
@@ -1135,7 +1135,7 @@ const baseRules = [
     `RULE-SET,twitch_domain,Global-TV`,
     `RULE-SET,porn_domain,Global-TV`,
     `RULE-SET,TVB_domain,Global-TV`,
-    `RULE-SET,media!cn_domain,Global-Medial`,
+    `RULE-SET,media_notcn_domain,Global-Medial`,
     `RULE-SET,twitter_ip,选择代理,no-resolve`,
     `RULE-SET,steam_domain,STEAM`,
     `RULE-SET,Epic_domain,游戏平台`,
@@ -1151,7 +1151,7 @@ const baseRules = [
     `RULE-SET,Shopify_domain,国外电商`,
     `RULE-SET,ebay_domain,国外电商`,
     `RULE-SET,gfw_domain,选择代理`,
-    `RULE-SET,geolocation-!cn,选择代理`,
+    `RULE-SET,geolocation_notcn,选择代理`,
     `RULE-SET,cn_domain,直连`,
     `RULE-SET,private_ip,直连,no-resolve`,
     `RULE-SET,cn_ip,直连,no-resolve`,
@@ -1799,11 +1799,11 @@ function buildProxyGroups({
             proxies: defaultProxies,
         },
         {
-            name: "自建/家宽节点",
+            name: "自建家宽节点",
             icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/private_node.png",
             type: "select",
             "include-all": true,
-            filter: "(?i)自建|家宽|CF|The_house|private|home|hgc|HKT|HKBN|icable|Hinet|att",
+            filter: "(?i)(自建|家宽|CF|The_house|private|home|hgc|HKT|HKBN|icable|Hinet|att)",
             "exclude-filter": "(?i)Seattle",
         },
         {
@@ -1811,7 +1811,7 @@ function buildProxyGroups({
             icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/European.png",
             type: "select",
             "include-all": true,
-            filter: "(?i)英国|德国|法国|荷兰|意大利|西班牙|UK|DE|FR|NL|IT|ES|Germany|France|Europe|欧洲",
+            filter: "(?i)(英国|德国|法国|荷兰|意大利|西班牙|UK|DE|FR|Germany|France|Europe|欧洲)",
         },
         lowCostNodes.length > 0 || regexFilter
             ? {

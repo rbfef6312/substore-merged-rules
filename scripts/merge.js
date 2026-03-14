@@ -45,14 +45,26 @@ function fetchUrl(url) {
   });
 }
 
+// 部分客户端不识别含 ! 的 provider 名，映射为安全名（避免与已有重名）
+const PROVIDER_SAFE_MAP = {
+  "ai!cn_domain": "ai_notcn_domain",
+  "tencent!cn_domain": "tencent_notcn_domain",
+  "media!cn_domain": "media_notcn_domain",
+  "geolocation-!cn": "geolocation_notcn",
+};
+function safeProviderName(name) {
+  return PROVIDER_SAFE_MAP[name] || (name + "").replace(/!/g, "_");
+}
+
 function toJsProvider(name, obj) {
+  const safeName = safeProviderName(name);
   const t = obj.type || "http";
   const b = obj.behavior || "domain";
   const f = obj.format || "mrs";
   const i = obj.interval || 86400;
   const u = obj.url || "";
-  const pathName = (name + "").replace(/[!@%]/g, "_");
-  return `    ${JSON.stringify(name)}: {
+  const pathName = safeName.replace(/[^a-zA-Z0-9_]/g, "_");
+  return `    ${JSON.stringify(safeName)}: {
         type: ${JSON.stringify(t)},
         behavior: ${JSON.stringify(b)},
         format: ${JSON.stringify(f)},
@@ -81,23 +93,28 @@ async function main() {
     return { ...base, ...val };
   };
 
-  // 1. 额外 rule-providers
+  // 1. 额外 rule-providers（使用 safe 名避免客户端解析问题）
   const extraProviders = [];
+  const seenKeys = new Set();
   for (const [name, val] of Object.entries(rp)) {
     if (CONVERT_PROVIDERS.has(name)) continue;
+    const key = safeProviderName(name);
+    if (seenKeys.has(key)) continue;
+    seenKeys.add(key);
     extraProviders.push(toJsProvider(name, expandProvider(name, val)));
   }
 
-  // 2. 额外规则（仅引用新 provider 的）
+  // 2. 额外规则（仅引用新 provider 的，provider 名做 safeProviderName 以匹配）
   const extraRules = [];
   for (const r of rules) {
     const parts = r.split(",").map((s) => s.trim());
     if (parts.length < 3 || parts[0] !== "RULE-SET") continue;
     const [, provider, group] = parts;
+    const safeProvider = safeProviderName(provider);
     const noResolve = parts.includes("no-resolve") ? ",no-resolve" : "";
     const mapped = GROUP_MAP[group] || group;
     if (!CONVERT_PROVIDERS.has(provider) && rp[provider]) {
-      extraRules.push(`\`RULE-SET,${provider},${mapped}${noResolve}\``);
+      extraRules.push(`\`RULE-SET,${safeProvider},${mapped}${noResolve}\``);
     }
   }
 
@@ -128,10 +145,10 @@ async function main() {
     { name: "STEAM", proxies: "defaultProxies", icon: `${ICON_BASE}/steam.png` },
     { name: "GitHub", proxies: "defaultProxies", icon: `${ICON_BASE}/github.png` },
     {
-      name: "自建/家宽节点",
+      name: "自建家宽节点",
       type: "select",
       "include-all": true,
-      filter: "(?i)自建|家宽|CF|The_house|private|home|hgc|HKT|HKBN|icable|Hinet|att",
+      filter: "(?i)(自建|家宽|CF|The_house|private|home|hgc|HKT|HKBN|icable|Hinet|att)",
       "exclude-filter": "(?i)Seattle",
       icon: `${ICON_BASE}/private_node.png`,
     },
@@ -139,7 +156,7 @@ async function main() {
       name: "欧洲节点",
       type: "select",
       "include-all": true,
-      filter: "(?i)英国|德国|法国|荷兰|意大利|西班牙|UK|DE|FR|NL|IT|ES|Germany|France|Europe|欧洲",
+      filter: "(?i)(英国|德国|法国|荷兰|意大利|西班牙|UK|DE|FR|Germany|France|Europe|欧洲)",
       icon: `${ICON_BASE}/European.png`,
     },
   ];
