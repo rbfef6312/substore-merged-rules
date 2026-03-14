@@ -1033,7 +1033,7 @@ const baseRules = [
     `DOMAIN-SUFFIX,truthsocial.com,Truth Social`,
     `RULE-SET,StaticResources,静态资源`,
     `RULE-SET,CDNResources,静态资源`,
-    `RULE-SET,AdditionalCDNResources,静态��源`,
+    `RULE-SET,AdditionalCDNResources,静态资源`,
     `RULE-SET,Crypto,Crypto`,
     `RULE-SET,EHentai,E-Hentai`,
     `RULE-SET,TikTok,TikTok`,
@@ -1237,7 +1237,7 @@ const geoxURL = {
 };
 
 /**
- * 各地区的元数据：`weight` 决定在代理组列表中的排列顺序（值越小越靠前，未设置则排末尾）；
+ * 各地区的元数据：`weight` 决定在代理组列表中的排列顺序（值越��越靠前，未设置则排末尾）；
  * `pattern` 是用于匹配节点名称的正则字符串；`icon` 为策略组图标 URL。
  */
 const countriesMeta = {
@@ -1271,7 +1271,7 @@ const countriesMeta = {
     },
     美国: {
         weight: 50,
-        pattern: "美国|美|US|United States|🇺🇸",
+        pattern: "美国|��|US|United States|🇺🇸",
         icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png",
     },
     加拿大: {
@@ -1319,7 +1319,7 @@ const LOW_COST_REGEX = /0\.[0-5]|低倍率|省流|大流量|实验性/i;
 const LANDING_REGEX = /家宽|家庭|家庭宽带|商宽|商业宽带|星链|Starlink|落地/i;
 /**
  * `LANDING_PATTERN` 与 `LANDING_REGEX` 描述同一规则，但格式不同：
- * - `LANDING_REGEX`：JS `RegExp` 对象，供脚本内部过滤节���时使用（用 `/i` flag 表示不区分大小写）。
+ * - `LANDING_REGEX`：JS `RegExp` 对象，供脚本内部过滤节点时使用（用 `/i` flag 表示不区分大小写）。
  * - `LANDING_PATTERN`：字符串，写入 YAML 的 `filter` / `exclude-filter` 字段，
  *   其中 `(?i)` 前缀是 Clash/Mihomo 的不区分大小写语法。
  */
@@ -1343,7 +1343,7 @@ function parseLandingNodes(config) {
  * 归类规则：
  * - 名称匹配 `LANDING_REGEX` 的落地节点和匹配 `LOW_COST_REGEX` 的低倍率节点不参与统计。
  * - 每个节点只归入第一个匹配到的地区，避免重复计入。
- * - 地区正则来�� `countriesMeta[country].pattern`；若旧配置中 pattern 携带 `(?i)` 前缀，
+ * - 地区正则来自 `countriesMeta[country].pattern`；若旧配置中 pattern 携带 `(?i)` 前缀，
  *   会在编译前自动剥离（JS RegExp 不支持该语法）。
  *
  * @param {object} config - 订阅配置对象，包含 `proxies` 数组。
@@ -1417,7 +1417,7 @@ function buildCountryProxyGroups({ countries, landing, loadBalance, regexFilter,
         } else {
             /**
              * regex 模式：通过 `include-all` + `filter` 让内核在运行时动态筛选节点，
-             * 同时用 `exclude-filter` 排除低倍率节点；若启��了落地功能，
+             * 同时用 `exclude-filter` 排除低倍率节点；若启用了落地功能，
              * 还需一并排除落地节点，防止其混入普通地区组。
              */
             groupConfig = {
