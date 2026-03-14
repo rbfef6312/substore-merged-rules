@@ -23,7 +23,7 @@ const CONVERT_PROVIDERS = new Set([
   "EHentai", "SteamFix", "GoogleFCM", "AdditionalFilter", "AdditionalCDNResources", "Crypto",
 ]);
 
-// configfull 组名 -> convert.js 组名（未在 convert 中的组映射到 选择代理）
+// configfull 组名 -> convert 组名（仅用于 convert 已有的组，新增组保持原名）
 const GROUP_MAP = {
   "节点选择": "选择代理",
   "全球直连": "直连",
@@ -31,30 +31,6 @@ const GROUP_MAP = {
   "哔哩哔哩": "Bilibili",
   "巴哈姆特": "Bahamut",
   "Final": "选择代理",
-  Discord: "选择代理",
-  LINE: "选择代理",
-  Signal: "选择代理",
-  Talkatone: "选择代理",
-  Meta: "选择代理",
-  GitHub: "选择代理",
-  GoogleVPN: "选择代理",
-  FCM: "直连",
-  DisneyPlus: "选择代理",
-  HBO: "选择代理",
-  Primevideo: "选择代理",
-  AppleTV: "选择代理",
-  Apple: "选择代理",
-  Emby: "选择代理",
-  "哔哩东南亚": "Bilibili",
-  "国内媒体": "直连",
-  "Global-TV": "选择代理",
-  "Global-Medial": "选择代理",
-  "游戏平台": "选择代理",
-  Speedtest: "选择代理",
-  PayPal: "选择代理",
-  Wise: "选择代理",
-  "国外电商": "选择代理",
-  STEAM: "选择代理",
   NETFLIX: "Netflix",
 };
 
@@ -125,8 +101,76 @@ async function main() {
     }
   }
 
-  // 3. 策略组注入已禁用 - 避免不同 JS 解析器兼容性问题，新规则映射到已有组
+  // 3. 注入 configfull 策略组（在 广告拦截 之后、lowCostNodes 之前），Telegram 保留 convert 的
+  const ICON_BASE = "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev";
+  const EXTRA_GROUPS = [
+    { name: "FCM", proxies: "defaultProxiesDirect", icon: `${ICON_BASE}/fcm.png` },
+    { name: "GoogleVPN", proxies: "defaultProxies", icon: `${ICON_BASE}/googlevpn.png` },
+    { name: "Discord", proxies: "defaultProxies", icon: `${ICON_BASE}/discord.png` },
+    { name: "Talkatone", proxies: "defaultProxies", icon: `${ICON_BASE}/talkatone.png` },
+    { name: "LINE", proxies: "defaultProxies", icon: `${ICON_BASE}/line.png` },
+    { name: "Signal", proxies: "defaultProxies", icon: `${ICON_BASE}/signal.png` },
+    { name: "DisneyPlus", proxies: "defaultProxies", icon: `${ICON_BASE}/disney.png` },
+    { name: "HBO", proxies: "defaultProxies", icon: `${ICON_BASE}/hbo.png` },
+    { name: "Primevideo", proxies: "defaultProxies", icon: `${ICON_BASE}/primevideo.png` },
+    { name: "AppleTV", proxies: "defaultProxies", icon: `${ICON_BASE}/appletv.png` },
+    { name: "Apple", proxies: "defaultProxiesDirect", icon: `${ICON_BASE}/apple.png` },
+    { name: "Emby", proxies: "defaultProxies", icon: `${ICON_BASE}/emby.png` },
+    { name: "哔哩东南亚", proxies: "defaultProxies", icon: `${ICON_BASE}/bilibilit.png` },
+    { name: "国内媒体", proxies: "defaultProxiesDirect", icon: `${ICON_BASE}/Chinese_media.png` },
+    { name: "Global-TV", proxies: "defaultProxies", icon: `${ICON_BASE}/global_tv.png` },
+    { name: "Global-Medial", proxies: "defaultProxies", icon: `${ICON_BASE}/global_media.png` },
+    { name: "游戏平台", proxies: "defaultProxies", icon: `${ICON_BASE}/game.png` },
+    { name: "Speedtest", proxies: "defaultProxies", icon: `${ICON_BASE}/speedtest.png` },
+    { name: "PayPal", proxies: "defaultProxies", icon: `${ICON_BASE}/paypal.png` },
+    { name: "Wise", proxies: "defaultProxies", icon: `${ICON_BASE}/wise.png` },
+    { name: "国外电商", proxies: "defaultProxies", icon: `${ICON_BASE}/shopping.png` },
+    { name: "STEAM", proxies: "defaultProxies", icon: `${ICON_BASE}/steam.png` },
+    { name: "GitHub", proxies: "defaultProxies", icon: `${ICON_BASE}/github.png` },
+    {
+      name: "自建/家宽节点",
+      type: "select",
+      "include-all": true,
+      filter: "(?i)自建|家宽|CF|The_house|private|home|hgc|HKT|HKBN|icable|Hinet|att",
+      "exclude-filter": "(?i)Seattle",
+      icon: `${ICON_BASE}/private_node.png`,
+    },
+    {
+      name: "欧洲节点",
+      type: "select",
+      "include-all": true,
+      filter: "(?i)英国|德国|法国|荷兰|意大利|西班牙|UK|DE|FR|NL|IT|ES|Germany|France|Europe|欧洲",
+      icon: `${ICON_BASE}/European.png`,
+    },
+  ];
+
+  const groupLines = EXTRA_GROUPS.map((g) => {
+    if (g["include-all"]) {
+      const excl = g["exclude-filter"] ? `\n            "exclude-filter": "${g["exclude-filter"]}",` : "";
+      return `        {
+            name: "${g.name}",
+            icon: "${g.icon}",
+            type: "select",
+            "include-all": true,
+            filter: "${g.filter}",${excl}
+        },`;
+    }
+    const prox = g.proxies === "defaultProxiesDirect" ? "defaultProxiesDirect" : "defaultProxies";
+    return `        {
+            name: "${g.name}",
+            icon: "${g.icon}",
+            type: "select",
+            proxies: ${prox},
+        },`;
+  }).join("\n");
+
   let out = convertJs;
+
+  // 注入策略组
+  out = out.replace(
+    /(name: "广告拦截",[\s\S]*?proxies: \["REJECT", "REJECT-DROP", PROXY_GROUPS\.DIRECT\],\s*\},)\s*(lowCostNodes\.length > 0)/,
+    `$1\n${groupLines}\n        $2`
+  );
 
   // 注入 rule-providers（注意 $1 已含尾部逗号，不要重复加）
   if (extraProviders.length) {
