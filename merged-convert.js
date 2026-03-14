@@ -255,7 +255,7 @@ const ruleProviders = {
         interval: 86400,
         url: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/Crypto.list",
         path: "./ruleset/Crypto.list",
-    },,
+    },
     "banAd_domain": {
         type: "http",
         behavior: "domain",

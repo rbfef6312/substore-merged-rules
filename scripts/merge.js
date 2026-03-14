@@ -127,11 +127,11 @@ async function main() {
 
   let out = convertJs;
 
-  // 注入 rule-providers
+  // 注入 rule-providers（注意 $1 已含尾部逗号，不要重复加）
   if (extraProviders.length) {
     out = out.replace(
       /(Crypto: \{[^}]+},)\s*\};/s,
-      `$1,\n${extraProviders.join(",\n")}\n};`
+      `$1\n${extraProviders.join(",\n")}\n};`
     );
   }
 
