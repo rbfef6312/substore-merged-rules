@@ -23,42 +23,15 @@ const CONVERT_PROVIDERS = new Set([
   "EHentai", "SteamFix", "GoogleFCM", "AdditionalFilter", "AdditionalCDNResources", "Crypto",
 ]);
 
-// configfull 组名 -> convert 组名（Clash Party 等客户端可能未识别注入的策略组，统一映射到已有组）
-const GROUP_MAP = {
-  "节点选择": "选择代理",
-  "全球直连": "直连",
-  "隐私拦截": "广告拦截",
-  "哔哩哔哩": "Bilibili",
-  "巴哈姆特": "Bahamut",
-  "Final": "选择代理",
-  NETFLIX: "Netflix",
-  Meta: "选择代理",
-  Discord: "选择代理",
-  LINE: "选择代理",
-  Signal: "选择代理",
-  Talkatone: "选择代理",
-  FCM: "直连",
-  GoogleVPN: "选择代理",
-  DisneyPlus: "选择代理",
-  HBO: "选择代理",
-  Primevideo: "选择代理",
-  AppleTV: "选择代理",
-  Apple: "直连",
-  Emby: "选择代理",
-  "哔哩东南亚": "Bilibili",
-  "国内媒体": "直连",
-  "Global-TV": "选择代理",
-  "Global-Medial": "选择代理",
-  "游戏平台": "选择代理",
-  Speedtest: "选择代理",
-  PayPal: "选择代理",
-  Wise: "选择代理",
-  "国外电商": "选择代理",
-  STEAM: "选择代理",
-  GitHub: "选择代理",
-  "自建家宽节点": "选择代理",
-  "欧洲节点": "选择代理",
-};
+// convert.js 已有的策略组，不重复注入
+const CONVERT_GROUPS = new Set([
+  "选择代理", "直连", "广告拦截", "静态资源", "AI", "Crypto", "Google", "Microsoft",
+  "YouTube", "Bilibili", "Bahamut", "Netflix", "TikTok", "Spotify", "E-Hentai",
+  "Telegram", "Truth Social", "OneDrive", "PikPak", "搜狗输入法", "GLOBAL",
+  "手动选择", "故障转移", "落地节点", "前置代理", "低倍率节点",
+]);
+// 规则中 configfull 组名 -> 实际组名（自建/家宽节点 -> 自建家宽节点）
+const RULE_GROUP_NORMALIZE = { "自建/家宽节点": "自建家宽节点" };
 
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
@@ -130,7 +103,7 @@ async function main() {
     extraProviders.push(toJsProvider(name, expandProvider(name, val)));
   }
 
-  // 2. 额外规则（仅引用新 provider 的，provider 名做 safeProviderName 以匹配）
+  // 2. 额外规则（使用注入后的策略组名）
   const extraRules = [];
   for (const r of rules) {
     const parts = r.split(",").map((s) => s.trim());
@@ -138,14 +111,92 @@ async function main() {
     const [, provider, group] = parts;
     const safeProvider = safeProviderName(provider);
     const noResolve = parts.includes("no-resolve") ? ",no-resolve" : "";
-    const mapped = GROUP_MAP[group] || group;
+    const groupName = RULE_GROUP_NORMALIZE[group] || group;
     if (!CONVERT_PROVIDERS.has(provider) && rp[provider]) {
-      extraRules.push(`\`RULE-SET,${safeProvider},${mapped}${noResolve}\``);
+      extraRules.push(`\`RULE-SET,${safeProvider},${groupName}${noResolve}\``);
     }
   }
 
-  // 3. 不注入额外策略组，避免 Substore/Clash Party/Clash Verge Rev 解析或校验失败
-  // 所有规则已通过 GROUP_MAP 映射到 convert 原生组
+  // 3. 解析 configfull 策略组，注入 convert 中不存在的
+  const proxyGroups = config["proxy-groups"] || [];
+  const iconBase = "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev";
+  const iconMap = {
+    select: `${iconBase}/select.png`, youtube: `${iconBase}/youtube.png`, fcm: `${iconBase}/fcm.png`,
+    googlevpn: `${iconBase}/googlevpn.png`, google: `${iconBase}/google.png`, meta: `${iconBase}/meta.png`,
+    ai: `${iconBase}/ai.png`, github: `${iconBase}/github.png`, onedrive: `${iconBase}/onedrive.png`,
+    microsoft: `${iconBase}/microsoft.png`, telegram: `${iconBase}/telegram.png`, discord: `${iconBase}/discord.png`,
+    talkatone: `${iconBase}/talkatone.png`, line: `${iconBase}/line.png`, signal: `${iconBase}/signal.png`,
+    tiktok: `${iconBase}/tiktok.png`, netflix: `${iconBase}/netflix.png`, disney: `${iconBase}/disney.png`,
+    hbo: `${iconBase}/hbo.png`, primevideo: `${iconBase}/primevideo.png`, appletv: `${iconBase}/appletv.png`,
+    apple: `${iconBase}/apple.png`, emby: `${iconBase}/emby.png`, bilibili: `${iconBase}/bilibili.png`,
+    bilibilit: `${iconBase}/bilibilit.png`, bahamut: `${iconBase}/bahamut.png`, spotify: `${iconBase}/spotify.png`,
+    Chinese_media: `${iconBase}/Chinese_media.png`, global_tv: `${iconBase}/global_tv.png`,
+    global_media: `${iconBase}/global_media.png`, game: `${iconBase}/game.png`, speedtest: `${iconBase}/speedtest.png`,
+    paypal: `${iconBase}/paypal.png`, wise: `${iconBase}/wise.png`, shopping: `${iconBase}/shopping.png`,
+    steam: `${iconBase}/steam.png`, direct: `${iconBase}/direct.png`, block: `${iconBase}/block.png`,
+    final: `${iconBase}/final.png`, private_node: `${iconBase}/private_node.png`,
+  };
+  const selectIcon = (name) => iconMap[name?.toLowerCase?.()?.replace(/[- ]/g, "_")?.replace("哔哩东南亚", "bilibilit")?.replace("国内媒体", "chinese_media")?.replace("global-tv", "global_tv")?.replace("global-medial", "global_media")?.replace("国外电商", "shopping")] || iconMap.select;
+  const proxyFirstProxies = "[PROXY_GROUPS.SELECT, \"欧洲节点\", \"自建家宽节点\", PROXY_GROUPS.DIRECT]";
+  const directFirstProxies = "[PROXY_GROUPS.DIRECT, PROXY_GROUPS.SELECT]";
+  const includeAllProxies = "[PROXY_GROUPS.SELECT, \"欧洲节点\", \"自建家宽节点\", PROXY_GROUPS.DIRECT]";
+
+  const extraGroupDefs = [];
+  const nameToProxies = {};
+  for (const g of proxyGroups) {
+    const name = typeof g.name === "string" ? g.name.trim() : "";
+    if (!name || CONVERT_GROUPS.has(name)) continue;
+    const safeName = name.replace("/", ""); // 自建/家宽节点 -> 自建家宽节点
+    if (safeName !== name && CONVERT_GROUPS.has(safeName)) continue;
+    const displayName = safeName;
+    if (nameToProxies[displayName]) continue;
+    nameToProxies[displayName] = true;
+
+    const icon = selectIcon(name);
+    if (displayName === "欧洲节点") {
+      extraGroupDefs.push(`        {
+            name: "欧洲节点",
+            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/European.png",
+            type: "select",
+            "include-all": true,
+            filter: "(?=.*(?i)(🇦🇱|🇦🇩|🇦🇹|🇧🇾|🇧🇪|🇧🇦|🇧🇬|🇭🇷|🇨🇾|🇨🇿|🇩🇰|🇪🇪|🇫🇮|🇫🇷|🇩🇪|🇬🇷|🇭🇺|🇮🇸|🇮🇪|🇮🇹|🇽🇰|🇱🇻|🇱🇮|🇱🇹|🇱🇺|🇲🇹|🇲🇩|🇲🇨|🇲🇪|🇳🇱|🇲🇰|🇳🇴|🇵🇱|🇵🇹|🇷🇴|🇷🇺|🇸🇲|🇷🇸|🇸🇰|🇸🇮|🇪🇸|🇸🇪|🇨🇭|🇹🇷|🇺🇦|🇬🇧|🇻🇦))",
+            proxies: [PROXY_GROUPS.SELECT, PROXY_GROUPS.DIRECT],
+        }`);
+    } else if (displayName === "自建家宽节点") {
+      extraGroupDefs.push(`        {
+            name: "自建家宽节点",
+            icon: "${iconBase}/private_node.png",
+            type: "select",
+            "include-all": true,
+            filter: "(?=.*(?i)(自建|CF|The_house|private|home|家宽|hgc|HKT|HKBN|icable|Hinet|att))",
+            "exclude-filter": "(?=.*(?i)(Seattle))",
+            proxies: [PROXY_GROUPS.SELECT, PROXY_GROUPS.DIRECT],
+        }`);
+    } else {
+      const isDirect = ["Apple", "哔哩哔哩", "国内媒体"].some((k) => displayName === k);
+      const isIncludeAll = ["AI", "Emby", "哔哩东南亚", "Global-TV", "Global-Medial", "Speedtest", "STEAM"].includes(displayName);
+      let proxies = proxyFirstProxies;
+      if (isDirect) proxies = directFirstProxies;
+      else if (displayName === "哔哩东南亚") proxies = "[PROXY_GROUPS.DIRECT, \"Bilibili\", PROXY_GROUPS.SELECT]";
+      else if (isIncludeAll) proxies = `[PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT]`;
+      if (displayName === "FCM") proxies = directFirstProxies;
+      extraGroupDefs.push(`        {
+            name: ${JSON.stringify(displayName)},
+            icon: ${JSON.stringify(icon)},
+            type: "select",
+            proxies: ${proxies},
+        }`);
+    }
+  }
+  // 确保 欧洲节点、自建家宽节点 先注入
+  const sorted = [];
+  const priority = ["欧洲节点", "自建家宽节点"];
+  for (const p of priority) if (nameToProxies[p]) {
+    const idx = extraGroupDefs.findIndex((s) => s.includes(`name: "${p}"`));
+    if (idx >= 0) { sorted.push(extraGroupDefs[idx]); extraGroupDefs.splice(idx, 1); }
+  }
+  const finalGroupDefs = [...sorted, ...extraGroupDefs];
+
   let out = convertJs;
 
   // 注入 rule-providers（注意 $1 已含尾部逗号，不要重复加）
@@ -153,6 +204,14 @@ async function main() {
     out = out.replace(
       /(Crypto: \{[^}]+},)\s*\};/s,
       `$1\n${extraProviders.join(",\n")}\n};`
+    );
+  }
+
+  // 注入策略组（在 广告拦截 后、lowCostNodes 前）
+  if (finalGroupDefs.length) {
+    out = out.replace(
+      /(name: "广告拦截",[^}]+},\s*)(lowCostNodes\.length)/,
+      `$1\n${finalGroupDefs.join(",\n")},\n        $2`
     );
   }
 
