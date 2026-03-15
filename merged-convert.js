@@ -1338,7 +1338,7 @@ function parseLandingNodes(config) {
 }
 
 /**
- * 遍历订阅中的��有节点，按 `countriesMeta` 中定义的地区进行归类。
+ * 遍历订阅中的所有节点，按 `countriesMeta` 中定义的地区进行归类。
  *
  * 归类规则：
  * - 名称匹配 `LANDING_REGEX` 的落地节点和匹配 `LOW_COST_REGEX` 的低倍率节点不参与统计。
@@ -1459,7 +1459,7 @@ function buildProxyGroups({
     defaultFallback,
 }) {
     /**
-     * 预先判断是否存在���定地区的节点，用于为 Bilibili、Bahamut、Truth Social 等
+     * 预先判断是否存在特定地区的节点，用于为 Bilibili、Bahamut、Truth Social 等
      * 有地区偏好的策略组提供更精准的候选列表。
      */
     const hasTW = countries.includes("台湾");
