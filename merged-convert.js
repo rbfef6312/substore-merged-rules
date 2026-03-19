@@ -1864,6 +1864,12 @@ function buildProxyGroups({
             type: "select",
             proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
         },
+        {
+            name: "��加坡节点",
+            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
+            type: "select",
+            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
+        },
         lowCostNodes.length > 0 || regexFilter
             ? {
                   name: PROXY_GROUPS.LOW_COST,
@@ -1947,6 +1953,7 @@ function main(config) {
             "tproxy-port": 7893,
             "routing-mark": 7894,
             "allow-lan": true,
+            "bind-address": "*",
             ipv6: ipv6Enabled,
             mode: "rule",
             "unified-delay": true,
