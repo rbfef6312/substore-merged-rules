@@ -173,7 +173,7 @@ const ruleProviders = {
         behavior: "domain",
         format: "mrs",
         interval: 86400,
-        url: "https://adrules.top/adrules-mihomo.mrs",
+        url: "https://gcore.jsdelivr.net/gh/217heidai/adblockfilters@main/rules/adblockmihomolite.mrs",
         path: "./ruleset/ADBlock.mrs",
     },
     SogouInput: {
@@ -1237,7 +1237,7 @@ const geoxURL = {
 };
 
 /**
- * 各地区的元数据：`weight` 决定在代理组列表中的排列顺序（值越��越靠前，未设置则排末尾）；
+ * 各地区的元数据：`weight` 决���在代理组列表中的排列顺序（值越小越靠前，未设置则排末尾）；
  * `pattern` 是用于匹配节点名称的正则字符串；`icon` 为策略组图标 URL。
  */
 const countriesMeta = {
@@ -1271,7 +1271,7 @@ const countriesMeta = {
     },
     美国: {
         weight: 50,
-        pattern: "美国|��|US|United States|🇺🇸",
+        pattern: "美国|美|US|United States|🇺🇸",
         icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png",
     },
     加拿大: {
@@ -1338,7 +1338,7 @@ function parseLandingNodes(config) {
 }
 
 /**
- * 遍历订阅中的��有节点，按 `countriesMeta` 中定义的地区进行归类。
+ * 遍历订阅中的所有节点，按 `countriesMeta` 中定义的地区进行归类。
  *
  * 归类规则：
  * - 名称匹配 `LANDING_REGEX` 的落地节点和匹配 `LOW_COST_REGEX` 的低倍率节点不参与统计。
@@ -1459,7 +1459,7 @@ function buildProxyGroups({
     defaultFallback,
 }) {
     /**
-     * 预先判断是否存在���定地区的节点，用于为 Bilibili、Bahamut、Truth Social 等
+     * 预先判断是否存在特定地区的节点，用于为 Bilibili、Bahamut、Truth Social 等
      * 有地区偏好的策略组提供更精准的候选列表。
      */
     const hasTW = countries.includes("台湾");
@@ -1861,6 +1861,12 @@ function buildProxyGroups({
         {
             name: "Final",
             icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/final.png",
+            type: "select",
+            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
+        },
+        {
+            name: "��加坡节点",
+            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
             type: "select",
             proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
         },
