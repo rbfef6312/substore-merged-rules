@@ -1864,12 +1864,6 @@ function buildProxyGroups({
             type: "select",
             proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
         },
-        {
-            name: "��加坡节点",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
         lowCostNodes.length > 0 || regexFilter
             ? {
                   name: PROXY_GROUPS.LOW_COST,
