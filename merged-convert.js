@@ -1310,7 +1310,7 @@ const countriesMeta = {
         icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/India.png",
     },
     马来西亚: {
-        pattern: "马来西亚|马来|MY|Malaysia|🇲🇾",
+        pattern: "马来西亚|马来|MY|Malaysia|🇲��",
         icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Malaysia.png",
     },
 };
@@ -1342,7 +1342,7 @@ function parseLandingNodes(config) {
  *
  * 归类规则：
  * - 名称匹配 `LANDING_REGEX` 的落地节点和匹配 `LOW_COST_REGEX` 的低倍率节点不参与统计。
- * - 每个节点只归入第一个匹配到的地区，避免重复计入。
+ * - 每个节点只归入第一个匹配到的地��，避免重复计入。
  * - 地区正则来自 `countriesMeta[country].pattern`；若旧配置中 pattern 携带 `(?i)` 前缀，
  *   会在编译前自动剥离（JS RegExp 不支持该语法）。
  *
@@ -1497,7 +1497,7 @@ function buildProxyGroups({
                   type: "select",
                   /**
                    * regex 模式：`include-all` 拉取所有节点，`exclude-filter` 排除落地节点，
-                   * 同时在 `proxies` 里附加手动指定的候选组名列表（各国家组等）。
+                   * 同时在 `proxies` 里附加手动指定的��选组名列表（各国家组等）。
                    * 枚举模式：直接列出候选组名（落地节点已在构建 `frontProxySelector` 时过滤）。
                    */
                   ...(regexFilter
@@ -1861,6 +1861,12 @@ function buildProxyGroups({
         {
             name: "Final",
             icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/final.png",
+            type: "select",
+            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
+        },
+        {
+            name: "��加坡节点",
+            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
             type: "select",
             proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
         },
