@@ -1030,29 +1030,28 @@ const baseRules = [
     `RULE-SET,ADBlock,广告拦截`,
     `RULE-SET,AdditionalFilter,广告拦截`,
     `RULE-SET,SogouInput,搜狗输入法`,
-    `DOMAIN-SUFFIX,truthsocial.com,Truth Social`,
+    `DOMAIN-SUFFIX,truthsocial.com,真相社交`,
     `RULE-SET,StaticResources,静态资源`,
     `RULE-SET,CDNResources,静态资源`,
     `RULE-SET,AdditionalCDNResources,静态资源`,
-    `RULE-SET,Crypto,Crypto`,
+    `RULE-SET,Crypto,加密货币`,
     `RULE-SET,EHentai,E-Hentai`,
     `RULE-SET,TikTok,TikTok`,
+    "GEOSITE,YOUTUBE,YouTube",
+    "GEOSITE,TELEGRAM,Telegram",
     `RULE-SET,SteamFix,${PROXY_GROUPS.DIRECT}`,
     `RULE-SET,GoogleFCM,${PROXY_GROUPS.DIRECT}`,
-    `DOMAIN,services.googleapis.cn,${PROXY_GROUPS.SELECT}`,
-    "GEOSITE,CATEGORY-AI-!CN,AI",
+    "GEOSITE,CATEGORY-AI-!CN,AI服务",
     `GEOSITE,GOOGLE-PLAY@CN,${PROXY_GROUPS.DIRECT}`,
     `GEOSITE,MICROSOFT@CN,${PROXY_GROUPS.DIRECT}`,
-    "GEOSITE,ONEDRIVE,OneDrive",
-    "GEOSITE,MICROSOFT,Microsoft",
-    "GEOSITE,TELEGRAM,Telegram",
-    "GEOSITE,YOUTUBE,YouTube",
+    "GEOSITE,APPLE,Apple",
+    "GEOSITE,MICROSOFT,微软服务",
     "GEOSITE,GOOGLE,Google",
     "GEOSITE,NETFLIX,Netflix",
     "GEOSITE,SPOTIFY,Spotify",
-    "GEOSITE,BAHAMUT,Bahamut",
-    "GEOSITE,BILIBILI,Bilibili",
-    "GEOSITE,PIKPAK,PikPak",
+    "GEOSITE,BAHAMUT,巴哈姆特",
+    "GEOSITE,BILIBILI,哔哩哔哩",
+    "GEOSITE,PIKPAK,PikPak网盘",
     `GEOSITE,GFW,${PROXY_GROUPS.SELECT}`,
     `GEOSITE,CN,${PROXY_GROUPS.DIRECT}`,
     `GEOSITE,PRIVATE,${PROXY_GROUPS.DIRECT}`,
@@ -1237,7 +1236,7 @@ const geoxURL = {
 };
 
 /**
- * 各地区的元数据：`weight` 决���在代理组列表中的排列顺序（值越小越靠前，未设置则排末尾）；
+ * 各地区的元数据：`weight` 决定在代理组列表中的排列顺���（值越小越靠前，未设置则排末尾）；
  * `pattern` 是用于匹配节点名称的正则字符串；`icon` 为策略组图标 URL。
  */
 const countriesMeta = {
@@ -1338,7 +1337,7 @@ function parseLandingNodes(config) {
 }
 
 /**
- * 遍历订阅中的所有节点，按 `countriesMeta` 中定义的地区进行归类。
+ * 遍历���阅中的所有节点，按 `countriesMeta` 中定义的地区进行归类。
  *
  * 归类规则：
  * - 名称匹配 `LANDING_REGEX` 的落地节点和匹配 `LOW_COST_REGEX` 的低倍率节点不参与统计。
@@ -1540,14 +1539,20 @@ function buildProxyGroups({
             proxies: defaultProxies,
         },
         {
-            name: "AI",
+            name: "AI服务",
             icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/chatgpt.png",
             type: "select",
             proxies: defaultProxies,
         },
         {
-            name: "Crypto",
+            name: "加密货币",
             icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Cryptocurrency_3.png",
+            type: "select",
+            proxies: defaultProxies,
+        },
+        {
+            name: "Apple",
+            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Apple.png",
             type: "select",
             proxies: defaultProxies,
         },
@@ -1558,7 +1563,7 @@ function buildProxyGroups({
             proxies: defaultProxies,
         },
         {
-            name: "Microsoft",
+            name: "微软服务",
             icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/Microsoft_Copilot.png",
             type: "select",
             proxies: defaultProxies,
@@ -1570,7 +1575,7 @@ function buildProxyGroups({
             proxies: defaultProxies,
         },
         {
-            name: "Bilibili",
+            name: "哔哩哔哩",
             icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/bilibili.png",
             type: "select",
             proxies:
@@ -1579,7 +1584,7 @@ function buildProxyGroups({
                     : defaultProxiesDirect,
         },
         {
-            name: "Bahamut",
+            name: "巴哈姆特",
             icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Bahamut.png",
             type: "select",
             proxies: hasTW
@@ -1617,7 +1622,7 @@ function buildProxyGroups({
             proxies: defaultProxies,
         },
         {
-            name: "Truth Social",
+            name: "真相社交",
             icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/TruthSocial.png",
             type: "select",
             proxies: hasUS
@@ -1625,13 +1630,7 @@ function buildProxyGroups({
                 : defaultProxies,
         },
         {
-            name: "OneDrive",
-            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/Onedrive.png",
-            type: "select",
-            proxies: defaultProxies,
-        },
-        {
-            name: "PikPak",
+            name: "PikPak网盘",
             icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/PikPak.png",
             type: "select",
             proxies: defaultProxies,
@@ -1861,12 +1860,6 @@ function buildProxyGroups({
         {
             name: "Final",
             icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/final.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "��加坡节点",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
             type: "select",
             proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
         },
