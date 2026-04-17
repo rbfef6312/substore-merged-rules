@@ -15,6 +15,18 @@ https://github.com/powerfullz/override-rules
 */
 
 const NODE_SUFFIX = "节点";
+const CDN_URL = "https://gcore.jsdelivr.net";
+
+const LOW_COST_FILTER = "0\\.[0-5]|低倍率|省流|实验性";
+const LOW_COST_REGEX = new RegExp(LOW_COST_FILTER, "i");
+const LANDING_REGEX = /家宽|家庭宽带|商宽|商业宽带|星链|Starlink|落地/i;
+/**
+ * `LANDING_PATTERN` 与 `LANDING_REGEX` 描述同一规则，但格式不同：
+ * - `LANDING_REGEX`：JS `RegExp` 对象，供脚本内部过滤节点时使用（用 `/i` flag 表示不区分大小写）。
+ * - `LANDING_PATTERN`：字符串，写入 YAML 的 `filter` / `exclude-filter` ��段，
+ *   其中 `(?i)` 前缀是 Clash/Mihomo 的不区分大小写语法。
+ */
+const LANDING_PATTERN = "(?i)家宽|家庭宽带|商宽|商业宽带|星链|Starlink|落地";
 
 function parseBool(value) {
     if (typeof value === "boolean") return value;
@@ -173,7 +185,7 @@ const ruleProviders = {
         behavior: "domain",
         format: "mrs",
         interval: 86400,
-        url: "https://gcore.jsdelivr.net/gh/217heidai/adblockfilters@main/rules/adblockmihomolite.mrs",
+        url: `${CDN_URL}/gh/217heidai/adblockfilters@main/rules/adblockmihomolite.mrs`,
         path: "./ruleset/ADBlock.mrs",
     },
     SogouInput: {
@@ -205,7 +217,7 @@ const ruleProviders = {
         behavior: "classical",
         format: "text",
         interval: 86400,
-        url: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/TikTok.list",
+        url: `${CDN_URL}/gh/powerfullz/override-rules@master/ruleset/TikTok.list`,
         path: "./ruleset/TikTok.list",
     },
     EHentai: {
@@ -213,7 +225,7 @@ const ruleProviders = {
         behavior: "classical",
         format: "text",
         interval: 86400,
-        url: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/EHentai.list",
+        url: `${CDN_URL}/gh/powerfullz/override-rules@master/ruleset/EHentai.list`,
         path: "./ruleset/EHentai.list",
     },
     SteamFix: {
@@ -221,7 +233,7 @@ const ruleProviders = {
         behavior: "classical",
         format: "text",
         interval: 86400,
-        url: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/SteamFix.list",
+        url: `${CDN_URL}/gh/powerfullz/override-rules@master/ruleset/SteamFix.list`,
         path: "./ruleset/SteamFix.list",
     },
     GoogleFCM: {
@@ -229,7 +241,7 @@ const ruleProviders = {
         behavior: "classical",
         format: "text",
         interval: 86400,
-        url: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/FirebaseCloudMessaging.list",
+        url: `${CDN_URL}/gh/powerfullz/override-rules@master/ruleset/FirebaseCloudMessaging.list`,
         path: "./ruleset/FirebaseCloudMessaging.list",
     },
     AdditionalFilter: {
@@ -237,7 +249,7 @@ const ruleProviders = {
         behavior: "classical",
         format: "text",
         interval: 86400,
-        url: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/AdditionalFilter.list",
+        url: `${CDN_URL}/gh/powerfullz/override-rules@master/ruleset/AdditionalFilter.list`,
         path: "./ruleset/AdditionalFilter.list",
     },
     AdditionalCDNResources: {
@@ -245,7 +257,7 @@ const ruleProviders = {
         behavior: "classical",
         format: "text",
         interval: 86400,
-        url: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/AdditionalCDNResources.list",
+        url: `${CDN_URL}/gh/powerfullz/override-rules@master/ruleset/AdditionalCDNResources.list`,
         path: "./ruleset/AdditionalCDNResources.list",
     },
     Crypto: {
@@ -253,777 +265,9 @@ const ruleProviders = {
         behavior: "classical",
         format: "text",
         interval: 86400,
-        url: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/ruleset/Crypto.list",
+        url: `${CDN_URL}/gh/powerfullz/override-rules@master/ruleset/Crypto.list`,
         path: "./ruleset/Crypto.list",
     },
-    "banAd_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/banAd_mini.mrs",
-        path: "./ruleset/banAd_domain.mrs",
-    },
-    "private_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs",
-        path: "./ruleset/private_domain.mrs",
-    },
-    "bank_cn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-bank-cn.mrs",
-        path: "./ruleset/bank_cn_domain.mrs",
-    },
-    "xiaomi_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/xiaomi.mrs",
-        path: "./ruleset/xiaomi_domain.mrs",
-    },
-    "biliintl_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/bilibili%40!cn.mrs",
-        path: "./ruleset/biliintl_domain.mrs",
-    },
-    "bilibili_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/bilibili.mrs",
-        path: "./ruleset/bilibili_domain.mrs",
-    },
-    "bahamut_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/bahamut.mrs",
-        path: "./ruleset/bahamut_domain.mrs",
-    },
-    "spotify_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/spotify.mrs",
-        path: "./ruleset/spotify_domain.mrs",
-    },
-    "steam_cn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/steam%40cn.mrs",
-        path: "./ruleset/steam_cn_domain.mrs",
-    },
-    "steamcdn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/Steam-domain.mrs",
-        path: "./ruleset/steamcdn_domain.mrs",
-    },
-    "steam_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/steam.mrs",
-        path: "./ruleset/steam_domain.mrs",
-    },
-    "ai_notcn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ai-!cn.mrs",
-        path: "./ruleset/ai_notcn_domain.mrs",
-    },
-    "openai_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/openai.mrs",
-        path: "./ruleset/openai_domain.mrs",
-    },
-    "youtube_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs",
-        path: "./ruleset/youtube_domain.mrs",
-    },
-    "google_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/google.mrs",
-        path: "./ruleset/google_domain.mrs",
-    },
-    "github_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs",
-        path: "./ruleset/github_domain.mrs",
-    },
-    "telegram_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs",
-        path: "./ruleset/telegram_domain.mrs",
-    },
-    "netflix_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs",
-        path: "./ruleset/netflix_domain.mrs",
-    },
-    "paypal_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs",
-        path: "./ruleset/paypal_domain.mrs",
-    },
-    "onedrive_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs",
-        path: "./ruleset/onedrive_domain.mrs",
-    },
-    "microsoft_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs",
-        path: "./ruleset/microsoft_domain.mrs",
-    },
-    "apple_firmware_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/applefirmware.mrs",
-        path: "./ruleset/apple_firmware_domain.mrs",
-    },
-    "apple_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs",
-        path: "./ruleset/apple_domain.mrs",
-    },
-    "speedtest_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs",
-        path: "./ruleset/speedtest_domain.mrs",
-    },
-    "tiktok_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs",
-        path: "./ruleset/tiktok_domain.mrs",
-    },
-    "gfw_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/gfw.mrs",
-        path: "./ruleset/gfw_domain.mrs",
-    },
-    "geolocation_notcn": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs",
-        path: "./ruleset/geolocation_notcn.mrs",
-    },
-    "cn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs",
-        path: "./ruleset/cn_domain.mrs",
-    },
-    "media_cn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-media-cn.mrs",
-        path: "./ruleset/media_cn_domain.mrs",
-    },
-    "media_notcn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-social-media-!cn.mrs",
-        path: "./ruleset/media_notcn_domain.mrs",
-    },
-    "Cloudflare_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/cloudflare.mrs",
-        path: "./ruleset/Cloudflare_domain.mrs",
-    },
-    "gitbook_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/gitbook.mrs",
-        path: "./ruleset/gitbook_domain.mrs",
-    },
-    "disney_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/disney.mrs",
-        path: "./ruleset/disney_domain.mrs",
-    },
-    "hbo_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/hbo.mrs",
-        path: "./ruleset/hbo_domain.mrs",
-    },
-    "primevideo_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/primevideo.mrs",
-        path: "./ruleset/primevideo_domain.mrs",
-    },
-    "NetEaseMusic_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/NetEaseMusic-domain.mrs",
-        path: "./ruleset/NetEaseMusic_domain.mrs",
-    },
-    "Amazon_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/amazon.mrs",
-        path: "./ruleset/Amazon_domain.mrs",
-    },
-    "Shopee_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/shopee.mrs",
-        path: "./ruleset/Shopee_domain.mrs",
-    },
-    "ebay_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/ebay.mrs",
-        path: "./ruleset/ebay_domain.mrs",
-    },
-    "appleTV_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/appletv.mrs",
-        path: "./ruleset/appleTV_domain.mrs",
-    },
-    "Epic_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/epicgames.mrs",
-        path: "./ruleset/Epic_domain.mrs",
-    },
-    "EA_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/ea.mrs",
-        path: "./ruleset/EA_domain.mrs",
-    },
-    "Blizzard_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/blizzard.mrs",
-        path: "./ruleset/Blizzard_domain.mrs",
-    },
-    "UBI_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/ubi.mrs",
-        path: "./ruleset/UBI_domain.mrs",
-    },
-    "Sony_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/sony.mrs",
-        path: "./ruleset/Sony_domain.mrs",
-    },
-    "Nintendo_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/nintendo.mrs",
-        path: "./ruleset/Nintendo_domain.mrs",
-    },
-    "facebook_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/facebook.mrs",
-        path: "./ruleset/facebook_domain.mrs",
-    },
-    "whatsapp_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/whatsapp.mrs",
-        path: "./ruleset/whatsapp_domain.mrs",
-    },
-    "instagram_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/instagram.mrs",
-        path: "./ruleset/instagram_domain.mrs",
-    },
-    "threads_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/threads.mrs",
-        path: "./ruleset/threads_domain.mrs",
-    },
-    "meta_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/meta.mrs",
-        path: "./ruleset/meta_domain.mrs",
-    },
-    "Wise_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/wise.mrs",
-        path: "./ruleset/Wise_domain.mrs",
-    },
-    "ifast_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/ifast.mrs",
-        path: "./ruleset/ifast_domain.mrs",
-    },
-    "line_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/line.mrs",
-        path: "./ruleset/line_domain.mrs",
-    },
-    "talkatone_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/Talkatone-domain.mrs",
-        path: "./ruleset/talkatone_domain.mrs",
-    },
-    "Shopify_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/shopify.mrs",
-        path: "./ruleset/Shopify_domain.mrs",
-    },
-    "signal_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/signal.mrs",
-        path: "./ruleset/signal_domain.mrs",
-    },
-    "wechat_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/WeChat.mrs",
-        path: "./ruleset/wechat_domain.mrs",
-    },
-    "proxy_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/proxy.mrs",
-        path: "./ruleset/proxy_domain.mrs",
-    },
-    "direct_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/direct.mrs",
-        path: "./ruleset/direct_domain.mrs",
-    },
-    "apple_cn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/apple%40cn.mrs",
-        path: "./ruleset/apple_cn_domain.mrs",
-    },
-    "alibaba_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/alibaba.mrs",
-        path: "./ruleset/alibaba_domain.mrs",
-    },
-    "tencent_notcn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/tencent%40!cn.mrs",
-        path: "./ruleset/tencent_notcn_domain.mrs",
-    },
-    "tencent_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/tencent.mrs",
-        path: "./ruleset/tencent_domain.mrs",
-    },
-    "ai_cn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-ai-cn.mrs",
-        path: "./ruleset/ai_cn_domain.mrs",
-    },
-    "discord_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/discord.mrs",
-        path: "./ruleset/discord_domain.mrs",
-    },
-    "fcm_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/googlefcm.mrs",
-        path: "./ruleset/fcm_domain.mrs",
-    },
-    "emby_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/emby.mrs",
-        path: "./ruleset/emby_domain.mrs",
-    },
-    "pt_cn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-pt.mrs",
-        path: "./ruleset/pt_cn_domain.mrs",
-    },
-    "public-tracker_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-public-tracker.mrs",
-        path: "./ruleset/public_tracker_domain.mrs",
-    },
-    "115_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/115.mrs",
-        path: "./ruleset/115_domain.mrs",
-    },
-    "aliyun_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/aliyun.mrs",
-        path: "./ruleset/aliyun_domain.mrs",
-    },
-    "twitch_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/twitch.mrs",
-        path: "./ruleset/twitch_domain.mrs",
-    },
-    "porn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-porn.mrs",
-        path: "./ruleset/porn_domain.mrs",
-    },
-    "iptv_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/iptv.mrs",
-        path: "./ruleset/iptv_domain.mrs",
-    },
-    "googlevpn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/googleVPN.mrs",
-        path: "./ruleset/googlevpn_domain.mrs",
-    },
-    "ai_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/ai.mrs",
-        path: "./ruleset/ai_domain.mrs",
-    },
-    "TVB_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/tvb.mrs",
-        path: "./ruleset/TVB_domain.mrs",
-    },
-    "game_cn_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/category-games%40cn.mrs",
-        path: "./ruleset/game_cn_domain.mrs",
-    },
-    "fakeip_filter_domain": {
-        type: "http",
-        behavior: "domain",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/Domain/fakeip-filter.mrs",
-        path: "./ruleset/fakeip_filter_domain.mrs",
-    },
-    "bilibili_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo-lite/geoip/bilibili.mrs",
-        path: "./ruleset/bilibili_ip.mrs",
-    },
-    "cn_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs",
-        path: "./ruleset/cn_ip.mrs",
-    },
-    "google_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs",
-        path: "./ruleset/google_ip.mrs",
-    },
-    "telegram_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs",
-        path: "./ruleset/telegram_ip.mrs",
-    },
-    "netflix_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs",
-        path: "./ruleset/netflix_ip.mrs",
-    },
-    "Amazon_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/amazon-ip.mrs",
-        path: "./ruleset/Amazon_ip.mrs",
-    },
-    "facebook_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/facebook.mrs",
-        path: "./ruleset/facebook_ip.mrs",
-    },
-    "twitter_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/twitter.mrs",
-        path: "./ruleset/twitter_ip.mrs",
-    },
-    "private_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/private.mrs",
-        path: "./ruleset/private_ip.mrs",
-    },
-    "talkatone_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/Talkatone-ip.mrs",
-        path: "./ruleset/talkatone_ip.mrs",
-    },
-    "steamcdn_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/steamCDN-ip.mrs",
-        path: "./ruleset/steamcdn_ip.mrs",
-    },
-    "NetEaseMusic_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/NetEaseMusic-ip.mrs",
-        path: "./ruleset/NetEaseMusic_ip.mrs",
-    },
-    "emby_ip": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/emby-ip.mrs",
-        path: "./ruleset/emby_ip.mrs",
-    },
-    "google_asn_cn": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/AS24424.mrs",
-        path: "./ruleset/google_asn_cn.mrs",
-    },
-    "discord_asn": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/AS49544.mrs",
-        path: "./ruleset/discord_asn.mrs",
-    },
-    "wechat_asn": {
-        type: "http",
-        behavior: "ipcidr",
-        format: "mrs",
-        interval: 86400,
-        url: "https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/rules/IP/AS132203.mrs",
-        path: "./ruleset/wechat_asn.mrs",
-    }
 };
 
 const baseRules = [
@@ -1034,7 +278,7 @@ const baseRules = [
     `RULE-SET,StaticResources,静态资源`,
     `RULE-SET,CDNResources,静态资源`,
     `RULE-SET,AdditionalCDNResources,静态资源`,
-    `RULE-SET,Crypto,加密货币`,
+    `RULE-SET,Crypto,加密货��`,
     `RULE-SET,EHentai,E-Hentai`,
     `RULE-SET,TikTok,TikTok`,
     "GEOSITE,YOUTUBE,YouTube",
@@ -1229,100 +473,90 @@ const dnsConfigFakeIp = buildDnsConfig({
 });
 
 const geoxURL = {
-    geoip: "https://gcore.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat",
-    geosite: "https://gcore.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat",
-    mmdb: "https://gcore.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb",
-    asn: "https://gcore.jsdelivr.net/gh/Loyalsoldier/geoip@release/GeoLite2-ASN.mmdb",
+    geoip: `${CDN_URL}/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat`,
+    geosite: `${CDN_URL}/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat`,
+    mmdb: `${CDN_URL}/gh/Loyalsoldier/geoip@release/Country.mmdb`,
+    asn: `${CDN_URL}/gh/Loyalsoldier/geoip@release/GeoLite2-ASN.mmdb`,
 };
 
 /**
- * 各地区的元数据：`weight` 决定在代理组列表中的排列顺���（值越小越靠前，未设置则排末尾）；
+ * 各地区的元数据：`weight` 决定在代理组列表中的排列顺序（值越小越靠前，未设置则排末尾）；
  * `pattern` 是用于匹配节点名称的正则字符串；`icon` 为策略组图标 URL。
  */
 const countriesMeta = {
     香港: {
         weight: 10,
         pattern: "香港|港|HK|hk|Hong Kong|HongKong|hongkong|🇭🇰",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Hong_Kong.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Hong_Kong.png`,
     },
     澳门: {
         pattern: "澳门|MO|Macau|🇲🇴",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Macao.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Macao.png`,
     },
     台湾: {
         weight: 20,
         pattern: "台|新北|彰化|TW|Taiwan|🇹🇼",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Taiwan.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Taiwan.png`,
     },
     新加坡: {
         weight: 30,
         pattern: "新加坡|坡|狮城|SG|Singapore|🇸🇬",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Singapore.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Singapore.png`,
     },
     日本: {
         weight: 40,
         pattern: "日本|川日|东京|大阪|泉日|埼玉|沪日|深日|JP|Japan|🇯🇵",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Japan.png`,
     },
     韩国: {
         pattern: "KR|Korea|KOR|首尔|韩|韓|🇰🇷",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Korea.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Korea.png`,
     },
     美国: {
         weight: 50,
         pattern: "美国|美|US|United States|🇺🇸",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/United_States.png`,
     },
     加拿大: {
         pattern: "加拿大|Canada|CA|🇨🇦",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Canada.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Canada.png`,
     },
     英国: {
         weight: 60,
         pattern: "英国|United Kingdom|UK|伦敦|London|🇬🇧",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png`,
     },
     澳大利亚: {
         pattern: "澳洲|澳大利亚|AU|Australia|🇦🇺",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Australia.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Australia.png`,
     },
     德国: {
         weight: 70,
         pattern: "德国|德|DE|Germany|🇩🇪",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Germany.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Germany.png`,
     },
     法国: {
         weight: 80,
         pattern: "法国|法|FR|France|🇫🇷",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/France.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/France.png`,
     },
     俄罗斯: {
         pattern: "俄罗斯|俄|RU|Russia|🇷🇺",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Russia.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Russia.png`,
     },
     泰国: {
         pattern: "泰国|泰|TH|Thailand|🇹🇭",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Thailand.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Thailand.png`,
     },
     印度: {
         pattern: "印度|IN|India|🇮🇳",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/India.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/India.png`,
     },
     马来西亚: {
         pattern: "马来西亚|马来|MY|Malaysia|🇲🇾",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Malaysia.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Malaysia.png`,
     },
 };
-
-const LOW_COST_REGEX = /0\.[0-5]|低倍率|省流|大流量|实验性/i;
-const LANDING_REGEX = /家宽|家庭|家庭宽带|商宽|商业宽带|星链|Starlink|落地/i;
-/**
- * `LANDING_PATTERN` 与 `LANDING_REGEX` 描述同一规则，但格式不同：
- * - `LANDING_REGEX`：JS `RegExp` 对象，供脚本内部过滤节点时使用（用 `/i` flag 表示不区分大小写）。
- * - `LANDING_PATTERN`：字符串，写入 YAML 的 `filter` / `exclude-filter` 字段，
- *   其中 `(?i)` 前缀是 Clash/Mihomo 的不区分大小写语法。
- */
-const LANDING_PATTERN = "(?i)家宽|家庭|家庭宽带|商宽|商业宽带|星链|Starlink|落地";
 
 function parseLowCost(config) {
     return (config.proxies || [])
@@ -1342,7 +576,7 @@ function parseLandingNodes(config) {
  * 归类规则：
  * - 名称匹配 `LANDING_REGEX` 的落地节点和匹配 `LOW_COST_REGEX` 的低倍率节点不参与统计。
  * - 每个节点只归入第一个匹配到的地区，避免重复计入。
- * - 地��正则来自 `countriesMeta[country].pattern`；若旧配置中 pattern 携带 `(?i)` 前缀，
+ * - 地区正则来自 `countriesMeta[country].pattern`；若旧配置中 pattern 携带 `(?i)` 前缀，
  *   会在编译前自动剥离（JS RegExp 不支持该语法）。
  *
  * @param {object} config - 订阅配置对象，包含 `proxies` 数组。
@@ -1383,8 +617,6 @@ function parseCountries(config) {
 
 function buildCountryProxyGroups({ countries, landing, loadBalance, regexFilter, countryInfo }) {
     const groups = [];
-    const baseExcludeFilter = "0\\.[0-5]|低倍率|省流|大流量|实验性";
-    const landingExcludeFilter = LANDING_PATTERN;
     const groupType = loadBalance ? "load-balance" : "url-test";
 
     /**
@@ -1416,7 +648,7 @@ function buildCountryProxyGroups({ countries, landing, loadBalance, regexFilter,
         } else {
             /**
              * regex 模式：通过 `include-all` + `filter` 让内核在运行时动态筛选节点，
-             * 同时用 `exclude-filter` 排除低倍率节��；若启用了落地功能，
+             * 同时用 `exclude-filter` 排除低倍率节点；若启用了落地功能，
              * 还需一并排除落地节点，防止其混入普通地区组。
              */
             groupConfig = {
@@ -1425,8 +657,8 @@ function buildCountryProxyGroups({ countries, landing, loadBalance, regexFilter,
                 "include-all": true,
                 filter: meta.pattern,
                 "exclude-filter": landing
-                    ? `${landingExcludeFilter}|${baseExcludeFilter}`
-                    : baseExcludeFilter,
+                    ? `${LANDING_PATTERN}|${LOW_COST_FILTER}`
+                    : LOW_COST_FILTER,
                 type: groupType,
             };
         }
@@ -1479,24 +711,24 @@ function buildProxyGroups({
     return [
         {
             name: PROXY_GROUPS.SELECT,
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Proxy.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Proxy.png`,
             type: "select",
             proxies: defaultSelector,
         },
         {
             name: PROXY_GROUPS.MANUAL,
-            icon: "https://gcore.jsdelivr.net/gh/shindgewongxj/WHATSINStash@master/icon/select.png",
+            icon: `${CDN_URL}/gh/shindgewongxj/WHATSINStash@master/icon/select.png`,
             "include-all": true,
             type: "select",
         },
         landing
             ? {
                   name: "前置代理",
-                  icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Area.png",
+                  icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Area.png`,
                   type: "select",
                   /**
                    * regex 模式：`include-all` 拉取所有节点，`exclude-filter` 排除落地节点，
-                   * 同时在 `proxies` 里附加手动指定的候选组名列表（各国家组等��。
+                   * 同时在 `proxies` 里附加手动指定的候选组名列表（各国家组等）。
                    * 枚举模式：直接列出候选组名（落地节点已在构建 `frontProxySelector` 时过滤）。
                    */
                   ...(regexFilter
@@ -1511,7 +743,7 @@ function buildProxyGroups({
         landing
             ? {
                   name: PROXY_GROUPS.LANDING,
-                  icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Airport.png",
+                  icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Airport.png`,
                   type: "select",
                   /**
                    * regex 模式：`include-all` + `filter` 动态筛选落地节点。
@@ -1524,7 +756,7 @@ function buildProxyGroups({
             : null,
         {
             name: PROXY_GROUPS.FALLBACK,
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Bypass.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Bypass.png`,
             type: "fallback",
             url: "https://cp.cloudflare.com/generate_204",
             proxies: defaultFallback,
@@ -1534,49 +766,49 @@ function buildProxyGroups({
         },
         {
             name: "静态资源",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Cloudflare.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Cloudflare.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "AI服务",
-            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/chatgpt.png",
+            icon: `${CDN_URL}/gh/powerfullz/override-rules@master/icons/chatgpt.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "加密货币",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Cryptocurrency_3.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Cryptocurrency_3.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "Apple",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Apple.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Apple.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "Google",
-            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/Google.png",
+            icon: `${CDN_URL}/gh/powerfullz/override-rules@master/icons/Google.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "微软服务",
-            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/Microsoft_Copilot.png",
+            icon: `${CDN_URL}/gh/powerfullz/override-rules@master/icons/Microsoft_Copilot.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "YouTube",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/YouTube.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/YouTube.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "哔哩哔哩",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/bilibili.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/bilibili.png`,
             type: "select",
             proxies:
                 hasTW && hasHK
@@ -1585,7 +817,7 @@ function buildProxyGroups({
         },
         {
             name: "巴哈姆特",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Bahamut.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Bahamut.png`,
             type: "select",
             proxies: hasTW
                 ? ["台湾节点", PROXY_GROUPS.SELECT, PROXY_GROUPS.MANUAL, PROXY_GROUPS.DIRECT]
@@ -1593,37 +825,37 @@ function buildProxyGroups({
         },
         {
             name: "Netflix",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Netflix.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Netflix.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "TikTok",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/TikTok.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/TikTok.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "Spotify",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Spotify.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Spotify.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "E-Hentai",
-            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/Ehentai.png",
+            icon: `${CDN_URL}/gh/powerfullz/override-rules@master/icons/Ehentai.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "Telegram",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Telegram.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Telegram.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "真相社交",
-            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/TruthSocial.png",
+            icon: `${CDN_URL}/gh/powerfullz/override-rules@master/icons/TruthSocial.png`,
             type: "select",
             proxies: hasUS
                 ? ["美国节点", PROXY_GROUPS.SELECT, PROXY_GROUPS.MANUAL]
@@ -1631,248 +863,38 @@ function buildProxyGroups({
         },
         {
             name: "PikPak网盘",
-            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/PikPak.png",
+            icon: `${CDN_URL}/gh/powerfullz/override-rules@master/icons/PikPak.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "SSH(22端口)",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Server.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Server.png`,
             type: "select",
             proxies: defaultProxies,
         },
         {
             name: "搜狗输入法",
-            icon: "https://gcore.jsdelivr.net/gh/powerfullz/override-rules@master/icons/Sougou.png",
+            icon: `${CDN_URL}/gh/powerfullz/override-rules@master/icons/Sougou.png`,
             type: "select",
             proxies: [PROXY_GROUPS.DIRECT, "REJECT"],
         },
         {
             name: PROXY_GROUPS.DIRECT,
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Direct.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Direct.png`,
             type: "select",
             proxies: ["DIRECT", PROXY_GROUPS.SELECT],
         },
         {
             name: "广告拦截",
-            icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/AdBlack.png",
+            icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/AdBlack.png`,
             type: "select",
             proxies: ["REJECT", "REJECT-DROP", PROXY_GROUPS.DIRECT],
-        },
-        
-        {
-            name: "欧洲节点",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/European.png",
-            type: "select",
-            "include-all": true,
-            filter: "(?=.*(?i)(🇦🇱|🇦🇩|🇦🇹|🇧🇾|🇧🇪|🇧🇦|🇧🇬|🇭🇷|🇨🇾|🇨🇿|🇩🇰|🇪🇪|🇫🇮|🇫🇷|🇩🇪|🇬🇷|🇭🇺|🇮🇸|🇮🇪|🇮🇹|🇽🇰|🇱🇻|🇱🇮|🇱🇹|🇱🇺|🇲🇹|🇲🇩|🇲🇨|🇲🇪|🇳🇱|🇲🇰|🇳🇴|🇵🇱|🇵🇹|🇷🇴|🇷🇺|🇸🇲|🇷🇸|🇸🇰|🇸🇮|🇪🇸|🇸🇪|🇨🇭|🇹🇷|🇺🇦|🇬🇧|🇻🇦))",
-            proxies: [PROXY_GROUPS.SELECT, PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "自建家宽节点",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/private_node.png",
-            type: "select",
-            "include-all": true,
-            filter: "(?=.*(?i)(自建|CF|The_house|private|home|家宽|hgc|HKT|HKBN|icable|Hinet|att))",
-            "exclude-filter": "(?=.*(?i)(Seattle))",
-            proxies: [PROXY_GROUPS.SELECT, PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "节点选择",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "FCM",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/fcm.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.DIRECT, PROXY_GROUPS.SELECT],
-        },
-        {
-            name: "GoogleVPN",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/googlevpn.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "Meta",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/meta.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "GitHub",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/github.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "Discord",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/discord.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "Talkatone",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/talkatone.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "LINE",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/line.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "Signal",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/signal.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "NETFLIX",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/netflix.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "DisneyPlus",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "HBO",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/hbo.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "Primevideo",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/primevideo.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "AppleTV",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/appletv.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "Apple",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/apple.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.DIRECT, PROXY_GROUPS.SELECT],
-        },
-        {
-            name: "Emby",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/emby.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "哔哩哔哩",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.DIRECT, PROXY_GROUPS.SELECT],
-        },
-        {
-            name: "哔哩东南亚",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/bilibilit.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.DIRECT, "Bilibili", PROXY_GROUPS.SELECT],
-        },
-        {
-            name: "巴哈姆特",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "国内媒体",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.DIRECT, PROXY_GROUPS.SELECT],
-        },
-        {
-            name: "Global-TV",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/global_tv.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "Global-Medial",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "游戏平台",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "Speedtest",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/speedtest.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "PayPal",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/paypal.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "Wise",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/wise.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "国外电商",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/shopping.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "STEAM",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/steam.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "全球直连",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "隐私拦截",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "Final",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/final.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
-        },
-        {
-            name: "��加坡节点",
-            icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/select.png",
-            type: "select",
-            proxies: [PROXY_GROUPS.SELECT, "欧洲节点", "自建家宽节点", PROXY_GROUPS.DIRECT],
         },
         lowCostNodes.length > 0 || regexFilter
             ? {
                   name: PROXY_GROUPS.LOW_COST,
-                  icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Lab.png",
+                  icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Lab.png`,
                   type: "url-test",
                   url: "https://cp.cloudflare.com/generate_204",
                   ...(!regexFilter
@@ -1937,7 +959,7 @@ function main(config) {
     const globalProxies = proxyGroups.map((item) => item.name);
     proxyGroups.push({
         name: "GLOBAL",
-        icon: "https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png",
+        icon: `${CDN_URL}/gh/Koolson/Qure@master/IconSet/Color/Global.png`,
         "include-all": true,
         type: "select",
         proxies: globalProxies,
